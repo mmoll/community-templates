@@ -14,7 +14,7 @@ first_disk="`echo ${disk_layout##*[1-9]} | /usr/bin/cut -d' ' -f1`"
 test -z "$first_disk" || echo "First disk: $first_disk"
 
 /root/bin/destroygeom -d <%= @host.params['install-disk'] || '$first_disk' %> || exit 1
-/root/bin/zfsinstall -d <%= @host.params['install-disk'] || '$first_disk' %> -s 2G -u <%= @mediapath %> || exit 1
+/root/bin/ufsinstall -d <%= @host.params['install-disk'] || '$first_disk' %> -s 1G -u <%= @mediapath %> || exit 1
 
 cp /etc/resolv.conf /mnt/etc/resolv.conf
 mount -t devfs devfs /mnt/dev
@@ -23,5 +23,6 @@ chroot /mnt /bin/sh /tmp/finish.sh
 rm /mnt/tmp/finish.sh
 
 fetch -q --no-verify-hostname --no-verify-peer -o /dev/null -d <%= foreman_url %>
-sleep 5
+sync
+sleep 1
 reboot
