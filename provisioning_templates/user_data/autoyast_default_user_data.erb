@@ -3,6 +3,7 @@ kind: user_data
 name: AutoYaST default user data
 oses:
 - OpenSUSE
+- SLES
 -%>
 <%
   # safemode renderer does not support unary negation
@@ -23,6 +24,9 @@ echo 'root:<%= root_pass -%>' | /usr/sbin/chpasswd -e
 <%= snippet('remote_execution_ssh_keys') %>
 
 <% if puppet_enabled %>
+<% if @host.param_true?('enable-puppetlabs-pc1-repo') -%>
+<%= snippet 'puppetlabs_repo' %>
+<% end -%>
 <%= snippet 'puppet_setup' %>
 <% end -%>
 
