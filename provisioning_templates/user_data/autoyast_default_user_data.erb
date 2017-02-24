@@ -23,6 +23,11 @@ echo 'root:<%= root_pass -%>' | /usr/sbin/chpasswd -e
 
 <%= snippet('remote_execution_ssh_keys') %>
 
+<% unless @host.param_false?('package_upgrade') -%>
+/usr/bin/zypper -n refresh
+/usr/bin/zypper -n update -l
+<% end -%>
+
 <% if puppet_enabled %>
 <% if @host.param_true?('enable-puppetlabs-pc1-repo') -%>
 <%= snippet 'puppetlabs_repo' %>
